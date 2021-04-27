@@ -8,6 +8,7 @@
 const puppeteer = require("puppeteer");
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
+const wbm = require('wbm');
 
 let pName = process.argv[2];
 
