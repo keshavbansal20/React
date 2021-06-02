@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- algorithm -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <!-- react through -> Dom change -->
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <!-- babel -> JSX-> js -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+            function counters(){
+                return(
+                    <React.Fragment>
+                        
+                    </React.Fragment>
+                )
+            }
+            class Counter extends React.Component {
+                //1
+                constructor(props){
+                    super(props);
+                    this.state = {
+                        count: 0
+                    }
+                    //bind
+                        this.decrement = this.decrement.bind(this);
+                        this.increment = this.increment.bind(this);           
+                }
+                
+                increment() {
+                    this.setState({
+                        count:this.state.count + 1
+                    });
+                }
+
+                decrement() {
+                    this.setState({
+                            
+                            count:this.state.count -    1>0?this.state.count-1:0
+                    });
+                }
+
+                //2.
+                render() { 
+                    return ( 
+                        <React.Fragment>
+                                <p>{this.state.count}</p>
+                                <button onClick={this.increment}>+</button>
+                                <button onClick={this.decrement}>-</button>
+
+                            </React.Fragment>
+                        );
+                }
+            }
+    
+    //bottom to top
+        ReactDOM.render(<Counter />, document.getElementById("root"));
+    </script>
+    
+    
+
+</body>
+</html>
