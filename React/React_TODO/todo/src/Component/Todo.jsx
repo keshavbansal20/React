@@ -4,6 +4,11 @@ export default class Todo extends Component {
     state = {
         taskList :[]
     }
+    //1.render --> static ui define
+    //2. identify different variables that
+    // can change throught the life time -->state
+    //3.rewrite render using those state varibales
+    //4.event listener to change the state
     deleteTask = (id) => {
         //current - rest of the task
         let filteredtasks = this.state.taskList.filter(function(task){ return task.id !== id;})
