@@ -8,8 +8,8 @@ export default class MoviePage extends Component {
     state = {
         movie: getMovies(),
         currSearchText: "",
-        sortedBy: '',
-        sortDirection: 0
+        limit:4 , 
+        currentPage:1
 
     }
     //id denge phir filter lga denge jisme id ayengi aur jo match krjaegi usse chodkr baki asb return hojayegi
@@ -65,40 +65,66 @@ export default class MoviePage extends Component {
             movie: sortedMovies
         })
     }
+
+    changelimit = (e) => {
+        let currLimit = e.target.value;
+        this.setState({
+            limit: currLimit
+        })
+    }
     render() {
         // console.log(this.state.movie);
-        let {movie , currSearchText} = this.state;
+        let {movie, currSearchText, limit, currentPage } = this.state;
         let filteredArr = movie.filter((movieObj) => {
             let title = movieObj.title.trim().toLowerCase();
             // console.log(title);
             return title.includes(currSearchText.toLowerCase());
         })
+        if(currSearchText=""){
+            filteredArr = this.state.movie;
+        }
+
+        let numberofPage = Math.ceil(filteredArr.length/limit);
+        let pageNumberArr = [];
+        for(let i = 0 ; i < numberofPage ; i++){
+            pageNumberArr.push(i+1);
+        }
+
+        //pagination implement
+        // let si = 
+        console.log(currentPage);
+        let si = (currentPage - 1) * limit;
+        let eidx = si + limit;
+        filteredArr = filteredArr.slice(si , eidx);
+        
         return (
             <div className = "row">
                 <div className ="col-3">
                     hello
                 </div>
                 <div className="col-9">
-                <input type = "search" value={currSearchText}
-                    onChange={this.setCurrentText}/>
+                    <input type = "search" value={currSearchText}
+                        onChange={this.setCurrentText}/>
+                    <input type="number" className="col-1"
+                        placeholder="no of elements/page"
+                        value={limit}
+                        onChange={this.changelimit}
+                    />
                     <table className="table">
                         <thead>
                             <tr>
-                            <th>#</th>
+                                <th scope="col">#</th>
                                 <th scope="col">Title</th>
-                                <th scope="col">
-                                    
-                                    Genre</th>
-                                
+                                <th scope="col"> Genre</th>
                                 <th scope="col" >
-                                <i className = "fas fa-sort-up" onClick={this.sortByRatings}/>
-                                Rate
-                                <i className = "fas fa-sort-down" onClick={this.sortByRatings}/>
+                                    <i className = "fas fa-sort-up" onClick={this.sortByRatings}/>
+                                    Rate
+                                    <i className = "fas fa-sort-down" onClick={this.sortByRatings}/>
                                 </th>
                                 <th scope="col">
-                                <i className = "fas fa-sort-up" onClick={this.sortByStock}/>
-                                    Stock
-                                <i className = "fas fa-sort-down" onClick={this.sortByStock}/>
+                                    <i className = "fas fa-sort-up" onClick={this.sortByStock}/>
+                                        Stock
+                                    <i className = "fas fa-sort-down" onClick={this.sortByStock}/>
                                 </th>
                              </tr>
                         </thead>
@@ -121,6 +147,19 @@ export default class MoviePage extends Component {
                             })}
                         </tbody>
                     </table>
+                    <nav aria-label="..." className="col-2">
+                            <ul className="pagination ">
+                                {
+                                    pageNumberArr.map((pageNumber) => {
+                                        return (
+                                              <li className="page-item active" aria-current="page">
+                                                <span className="page-link">{pageNumber}</span>
+                                              </li>  
+                                            )
+                                    })
+                                }
+                            </ul>
+                    </nav>
                 </div>
             </div>
         )
