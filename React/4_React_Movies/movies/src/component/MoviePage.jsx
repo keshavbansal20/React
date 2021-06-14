@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
 import { getMovies } from '../temp/MovieService'
+import List from "./List.jsx";
+import Pagination from "./Pagination.jsx";
 
-const sortAsc = 1;
-const sortDesc = -1;
 
 export default class MoviePage extends Component {
     state = {
-        movie: getMovies(),
+        movie: [],
+        genres: [{id:1 , name: "All Genres"}],
         currSearchText: "",
         limit:4 , 
-        currentPage:1
+        currentPage:1 ,
+        cGenre: "All Genres"
 
     }
     //id denge phir filter lga denge jisme id ayengi aur jo match krjaegi usse chodkr baki asb return hojayegi
@@ -25,6 +27,7 @@ export default class MoviePage extends Component {
 
     setCurrentText = (e) => {
         let task = e.target.value;
+        console.log(this.state.currSearchText);
         this.setState({
             currSearchText:task
         })
@@ -72,39 +75,78 @@ export default class MoviePage extends Component {
             limit: currLimit
         })
     }
+    changeCurrentPage = (pageNumber) => {
+        this.setState({
+            currentPage: pageNumber
+        })
+    }
+
+    groupBygenre = (name) => {
+        this.setState({
+            cGenre:name , 
+            currSearchText:""
+        })
+    }
+
+    async componentDidMount() {
+        let resp = await fetch("https://react-backend101.herokuapp.com/movies");
+        let jsonMovies = await resp.json();
+        
+        this.setState({
+            movie:jsonMovies.movies
+        })
+
+         resp = await fetch("https://react-backend101.herokuapp.com/genres");
+        let jsonGenres = await resp.json();
+        this.setState({
+            genres:[...this.state.genres ,...jsonGenres.genres]
+        });
+
+    }
+    
     render() {
         // console.log(this.state.movie);
-        let {movie, currSearchText, limit, currentPage } = this.state;
-        let filteredArr = movie.filter((movieObj) => {
-            let title = movieObj.title.trim().toLowerCase();
-            // console.log(title);
-            return title.includes(currSearchText.toLowerCase());
-        })
-        if(currSearchText=""){
-            filteredArr = this.state.movie;
+        let {movie, currSearchText, limit, currentPage , genres , cGenre } = this.state;
+        
+        //genre
+        let filteredArr = movie;
+        if(cGenre!="All Genres"){
+            filteredArr = filteredArr.filter((movieObj) => {
+                return movieObj.genre.name == cGenre;
+            })
         }
+        if(currSearchText!=""){
+            let filteredArr = movie.filter((movieObj) => {
+                let title = movieObj.title.trim().toLowerCase();
+                // console.log(title);
+                return title.includes(currSearchText.toLowerCase());
+            })
+        }
+        
+        
 
         let numberofPage = Math.ceil(filteredArr.length/limit);
-        let pageNumberArr = [];
-        for(let i = 0 ; i < numberofPage ; i++){
-            pageNumberArr.push(i+1);
-        }
-
-        //pagination implement
-        // let si = 
-        console.log(currentPage);
+       
+         // impliment
+        // console.log(filteredArr);
+        // si -> (pagenumber-1)*limit;
+        // eidx = si+limit;
+        // number of pages 
+        // paginate 
         let si = (currentPage - 1) * limit;
         let eidx = si + limit;
         filteredArr = filteredArr.slice(si , eidx);
         
+
         return (
             <div className = "row">
                 <div className ="col-3">
-                    hello
+                    <List genres={genres} groupBygenre={this.groupBygenre}></List>
                 </div>
                 <div className="col-9">
                     <input type = "search" value={currSearchText}
-                        onChange={this.setCurrentText}/>
+                        placeholder="search movie"
+                    onChange={this.setCurrentText}/>
                     <input type="number" className="col-1"
                         placeholder="no of elements/page"
                         value={limit}
@@ -147,19 +189,16 @@ export default class MoviePage extends Component {
                             })}
                         </tbody>
                     </table>
-                    <nav aria-label="..." className="col-2">
-                            <ul className="pagination ">
-                                {
-                                    pageNumberArr.map((pageNumber) => {
-                                        return (
-                                              <li className="page-item active" aria-current="page">
-                                                <span className="page-link">{pageNumber}</span>
-                                              </li>  
-                                            )
-                                    })
-                                }
-                            </ul>
-                    </nav>
+
+
+                    
+                    <Pagination                //logic yhi rhgea
+
+                            numberofPage = {numberofPage}         //sirf konsa page h , kya number h  page or changeCurrentPage wala function bhejge
+                            currentPage = {currentPage}
+                            changeCurrentPage = {this.changeCurrentPage}
+                            >
+                    </Pagination>
                 </div>
             </div>
         )
