@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { getMovies } from '../temp/MovieService'
 import List from "./List.jsx";
 import Pagination from "./Pagination.jsx";
-
+// import New from "./New.jsx";
+import {Link} from "react-router-dom"
 
 export default class MoviePage extends Component {
     state = {
-        movie: [],
+      
         genres: [{id:1 , name: "All Genres"}],
         currSearchText: "",
         limit:4 , 
@@ -15,15 +16,7 @@ export default class MoviePage extends Component {
 
     }
     //id denge phir filter lga denge jisme id ayengi aur jo match krjaegi usse chodkr baki asb return hojayegi
-    deleteEntry = (id) => {
-        let filteredMovies = 
-        this.state.movie.filter((movieObj) =>{
-            return movieObj._id != id;
-        })
-        this.setState({
-            movie: filteredMovies
-        })
-    }
+    
 
     setCurrentText = (e) => {
         let task = e.target.value;
@@ -89,14 +82,9 @@ export default class MoviePage extends Component {
     }
 
     async componentDidMount() {
-        let resp = await fetch("https://react-backend101.herokuapp.com/movies");
-        let jsonMovies = await resp.json();
         
-        this.setState({
-            movie:jsonMovies.movies
-        })
 
-         resp = await fetch("https://react-backend101.herokuapp.com/genres");
+        let resp = await fetch("https://react-backend101.herokuapp.com/genres");
         let jsonGenres = await resp.json();
         this.setState({
             genres:[...this.state.genres ,...jsonGenres.genres]
@@ -106,8 +94,8 @@ export default class MoviePage extends Component {
     
     render() {
         // console.log(this.state.movie);
-        let {movie, currSearchText, limit, currentPage , genres , cGenre } = this.state;
-        
+        let { currSearchText, limit, currentPage , genres , cGenre } = this.state;
+        let {movie , deleteEntry} = this.props;
         //genre
         let filteredArr = movie;
         if(cGenre!="All Genres"){
@@ -144,6 +132,9 @@ export default class MoviePage extends Component {
                     <List genres={genres} groupBygenre={this.groupBygenre}></List>
                 </div>
                 <div className="col-9">
+                    <button className= "btn btn-primary">
+                        <Link to="/new" className="text-light">New</Link>
+                    </button>
                     <input type = "search" value={currSearchText}
                         placeholder="search movie"
                     onChange={this.setCurrentText}/>
@@ -152,6 +143,8 @@ export default class MoviePage extends Component {
                         value={limit}
                         onChange={this.changelimit}
                     />
+                    {/* <input type="text" className="pageNumber"
+                        placeholder="page number" /> */}
                     <table className="table">
                         <thead>
                             <tr>
@@ -182,7 +175,7 @@ export default class MoviePage extends Component {
                                     <td>{movieObj.numberInStock}</td>
                                     <td><button type="button" className="btn btn-danger"
                                         onClick={() => {
-                                            this.deleteEntry(movieObj._id);
+                                            deleteEntry(movieObj._id);
                                         }}>Delete</button></td>
                                     </tr>)
                                     
