@@ -28,7 +28,8 @@ export default class MoviePage extends Component {
     sortByRatings = (e) =>{
         let className = e.target.className;
         let sortedMovies;
-        let {movie} = this.state;
+        // let {movie} = this.state;
+        let {movie} = this.props;
         if(className=="fas fa-sort-up") {
             sortedMovies = movie.sort((movieObjA , movieObjB) => {
                 return movieObjA.dailyRentalRate-movieObjB.dailyRentalRate;
@@ -47,7 +48,8 @@ export default class MoviePage extends Component {
     sortByStock = (e) => {
         let className = e.target.className;
         let sortedMovies;
-        let {movie} = this.state;
+        // let {movie} = this.state;
+        let {movie} = this.props
         if(className=="fas fa-sort-up") {
             sortedMovies = movie.sort((movieObjA , movieObjB) => {
                 return movieObjA.numberInStock -movieObjB.numberInStock;
@@ -131,10 +133,13 @@ export default class MoviePage extends Component {
                 <div className ="col-3">
                     <List genres={genres} groupBygenre={this.groupBygenre}></List>
                 </div>
+                
                 <div className="col-9">
+                    <div>
                     <button className= "btn btn-primary">
                         <Link to="/new" className="text-light">New</Link>
                     </button>
+                    </div>
                     <input type = "search" value={currSearchText}
                         placeholder="search movie"
                     onChange={this.setCurrentText}/>
