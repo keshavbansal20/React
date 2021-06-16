@@ -5,6 +5,7 @@ import New from './component/New';
 import {Switch , Route} from "react-router-dom";
 import React, { Component } from 'react'
 import NavBar  from './component/NavBar';
+import Login from './component/Login';
 export default class App extends Component {
   state = {
     movie:[]
@@ -66,7 +67,7 @@ export default class App extends Component {
               ></New>)
             }
           }></Route>
-           {/* <Route path="/login" component={Login}></Route> */}
+            <Route path="/login" component={Login}></Route> 
            <Route path="/" render={(props)=>{
              return (<MoviePage {...props}
               deleteEntry = {this.deleteEntry}
