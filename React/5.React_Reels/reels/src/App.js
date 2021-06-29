@@ -1,43 +1,40 @@
+import React, { Component ,useContext } from 'react';
+import { Switch , Route , BrowserRouter as Router , Redirect , Link} from "react-router-dom";
+import { AuthContext , AuthProvider }  from './contexts/AuthProvider';
 
-import React, { useContext } from 'react'
-import { Switch, Route, BrowserRouter as Router, Redirect } from "react-router-dom";
-import Feed from './components/Feed'
-import Login from './components/Login'
+
+import Feed from './components/Feed';
+import Login from './components/Login';
 import Signup from './components/Signup';
-import { AuthContext, AuthProvider } from "./contexts/AuthContext";
-function App() {
+import Profile from './components/Profile';
+
+ function App(){
+
   return (
-          <Router>
-          <AuthProvider>
-              <Switch>
-                  {/* {console.log("Hello")} */}
-                  <Route path="/login" component={Login}></Route>
-                  <Route path="/signup" component={Signup}></Route>
-                  {/* <Route path="/" component={Feed}></Route> */}
-                  <PrivateRoute path="/" exact abc={Feed}></PrivateRoute>
-              </Switch>
-          </AuthProvider>
-      </Router>
-  );
-}
+    <div>
+      <AuthProvider>
+        <Router>
+          <Switch>
+            <Route path="/login" component={Login}></Route>
+            <Route path="/signup" component={Signup}></Route>
+            <PrivateRoute path="/profile" component={Profile}></PrivateRoute>
+            
+            <PrivateRoute path="/" abc={Feed}></PrivateRoute>
+          </Switch>
+        </Router>
+      </AuthProvider>
+    </div>
+  )
 
-//history
-//location in parent props
- function PrivateRoute(parentProps){
-   let {currentUser} = useContext(AuthContext);
-   console.log(" in private rote" , currentUser);
-
-   const Component = parentProps.abc;
-
-   return (
-     <Route {...parentProps} render={
-        (parentProps) => {
-          return (currentUser !=null ?
-            <Component {...parentProps}></Component>:<Redirect to="/login"></Redirect>)
-        }
-     }>
-     </Route>
-   )
+  function PrivateRoute(props){
+    console.log(props);
+    let Component = props.abc;
+    let { currentUser}= useContext(AuthContext);
+    return (<Route {...props} render={(props) => {
+      return currentUser != null ? <Component {...props}></Component> :
+       <Redirect to="/login"></Redirect>
+    }}></Route>)
+  }
 }
 
 export default App;
