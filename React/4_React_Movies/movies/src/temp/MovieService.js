@@ -66,6 +66,6 @@ const movies = [
     }
   ];
   
-  export function getMovies() {
+  export default function getMovies() {
     return movies;
   }

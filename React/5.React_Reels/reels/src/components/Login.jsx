@@ -11,38 +11,32 @@ function Login(props){
 
     let useStyles = makeStyles({
         centerDivs: {
-            height: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            width: "100vw"
-            ,
-            alignItems: "center",
-            // paddingLeft: "10vw",
-            // paddingRight: "10vw",
+            height:"100vh",
+            display:"flex" ,
+            justifyContent:"center", 
+            width:"100vw" , 
+            alignItems:"center" ,
         },
         crousel: {
-            height: "10rem",
-            backgroundColor: "lightgray"
+            height:"10rem",
+            backgroundColor:"lightgray"
         },
-        fullWidth: {
-            width: "100%"
-        },
-        centerElements: {
-            display: "flex",
-            flexDirection: "column",
-        },
+        fullWidth:{
+            width:"100%"
+        } ,
         mb: {
-            marginBottom: "0.5rem"
+            marginBottom:"0.5rem"
         },
-        alignCenter: {
-            justifyContent: "center"
-        },
-        // alignitems: {
-        //     textAlign: "center"
-        // },
         image: {
             height: "6rem",
             backgroundSize: "contain"
+        } ,
+        alignCenter:{
+            justifyContent:"center"
+        },
+        centerElements:{
+            display:"flex" , 
+            flexDirectoini:"column" ,
         }
     })
 
@@ -130,7 +124,7 @@ function Login(props){
 }
 
 
-function LinkButton(prop) {
+export function LinkButton(prop) {
     return(
         <div>
         <Button variant="text" style={{color:"blue"}}>
@@ -140,3 +134,4 @@ function LinkButton(prop) {
     )
 }
 export default Login;
+// export default LinkButton;

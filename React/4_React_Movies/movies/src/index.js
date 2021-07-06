@@ -6,12 +6,14 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import Hooks from "./Hooks";
 import Login from "./Login"
+import App2 from "./App2";
 ReactDOM.render(
   // <BrowserRouter>
   //   <App />
   // </BrowserRouter>,
+  <App2></App2>,
   // <Hooks></Hooks>,
-  <Login></Login> ,
+  // <Login></Login> ,
   document.getElementById('root')
 );
 

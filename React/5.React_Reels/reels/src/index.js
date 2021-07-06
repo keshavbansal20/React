@@ -5,13 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 // import ContextParent from "./ContextParent";
 import Material from "./Material";
+import IntersectionDemo from "./IntersectionObserver/IntersectionDemo"
 ReactDOM.render(
   <React.StrictMode>
-  <App></App>,
-  
+   <App></App>,
   </React.StrictMode>,
   document.getElementById('root')
   );
+  // <IntersectionDemo></IntersectionDemo>
   // <Material ></Material>
 
 // If you want to start measuring performance in your app, pass a function

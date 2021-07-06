@@ -107,7 +107,7 @@ export default class MoviePage extends Component {
         }
         if(currSearchText!=""){
             let filteredArr = movie.filter((movieObj) => {
-                let title = movieObj.title.trim().toLowerCase();
+                let title  = movieObj.title.trim().toLowerCase();
                 // console.log(title);
                 return title.includes(currSearchText.toLowerCase());
             })
@@ -136,13 +136,13 @@ export default class MoviePage extends Component {
                 
                 <div className="col-9">
                     <div>
-                    <button className= "btn btn-primary">
-                        <Link to="/new" className="text-light">New</Link>
-                    </button>
+                        <button className= "btn btn-primary">
+                            <Link to="/new" className="text-light">New</Link>
+                        </button>
                     </div>
                     <input type = "search" value={currSearchText}
-                        placeholder="search movie"
-                    onChange={this.setCurrentText}/>
+                            placeholder="search movie"
+                        onChange={this.setCurrentText}/>
                     <input type="number" className="col-1"
                         placeholder="no of elements/page"
                         value={limit}
@@ -158,7 +158,7 @@ export default class MoviePage extends Component {
                                 <th scope="col"> Genre</th>
                                 <th scope="col" >
                                     <i className = "fas fa-sort-up" onClick={this.sortByRatings}/>
-                                    Rate
+                                        Rate
                                     <i className = "fas fa-sort-down" onClick={this.sortByRatings}/>
                                 </th>
                                 <th scope="col">

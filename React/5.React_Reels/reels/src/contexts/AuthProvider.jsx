@@ -15,6 +15,9 @@ export function AuthProvider({children}) {
     function signout() {
         return auth.signOut();
     }
+    function signup(email, password) {
+        return auth.createUserWithEmailAndPassword(email, password);
+    }
 
     useEffect(()=>{
         console.log("inside listener" ,currentUser);
@@ -32,7 +35,8 @@ export function AuthProvider({children}) {
     let value = {
         currentUser , 
         signout , 
-        login
+        login,
+        signup
     }
 
     return (
