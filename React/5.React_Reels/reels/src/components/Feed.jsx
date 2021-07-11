@@ -5,7 +5,9 @@ import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import uuid from 'react-uuid'
+import uuid from 'react-uuid';
+import FavouriteIcon from '@material-ui/icons/Favorite';
+
 import {database , storage} from "../firebase";
 function Feed() {
     const useStyles = makeStyles((theme) => ({
@@ -17,6 +19,20 @@ function Feed() {
         input: {
             display: 'none',
         },
+        heart: {
+            // backgroundColor: "red"
+            position: "absolute",
+            left: "27vw",
+            bottom: "-5vh",
+            fontSize: "2rem"
+        },
+        notSelected: {
+            color: "lightgray"
+        }
+        ,
+        selected: {
+            color: "red"
+        }
     }));
     const classes = useStyles();
 
@@ -26,6 +42,28 @@ function Feed() {
     const [pageLoading , setpageLoading] = useState(true);
     const { signout , currentUser}= useContext(AuthContext);
     const [videos , setVideos ] = useState([]);
+    const [isLiked , setLiked] = useState(false);
+
+
+    const handleLiked = async (puid) => {
+        console.log(puid);
+        let postRef = await database.posts.doc(puid).get();
+        let post = postRef.data();
+        let likes = post.likes;
+        if(isLiked == false){
+            database.posts.doc(puid).update({
+                "likes":[...likes , currentUser.uid]
+            })
+        } else {
+            let likes = post.likes.filter(lkuid => {
+                return lkuid != currentUser.uid;
+            })
+            database.posts.doc(puid).update({
+                "likes":likes 
+            })
+        }
+        setLiked(!isLiked);
+    }
     const handleLogout = async () => {
         try{
             
@@ -111,22 +149,47 @@ function Feed() {
 
     useEffect(async() => {
         let unsub = await database.posts.orderBy("createdAt" , "desc")
+        // .onSnapshot(async snapshot => {
+        //     console.log(snapshot);
+        //     let videos = snapshot.docs.map(doc=>doc.data());
+        //     // console.log(videos)
+        //     let videoArr = [];
+        //     for(let i = 0 ;i<videos.length;i++){
+        //       let videoUrl  = videos[i].url;
+        //       let auid = videos[i].auid;
+        //       let userObject = await database.users.doc(auid).get();
+        //       let userProfileUrl = userObject.data().profileUrl;
+        //       let userName = userObject.data().username;
+        //       videoArr.push({videoUrl , userProfileUrl , userName});
+        //     }
+        //     setVideos(videoArr);
+        // })
+        // return unsub; 
+        // setVideos(VideoArr);
         .onSnapshot(async snapshot => {
             console.log(snapshot);
-            let videos = snapshot.docs.map(doc=>doc.data());
-            // console.log(videos)
-            let videoArr = [];
-            for(let i = 0 ;i<videos.length;i++){
-              let videoUrl  = videos[i].url;
-              let auid = videos[i].auid;
-              let userObject = await database.users.doc(auid).get();
-              let userProfileUrl = userObject.data().profileUrl;
-              let userName = userObject.data().username;
-              videoArr.push({videoUrl , userProfileUrl , userName});
-            }
-            setVideos(videoArr);
-        })
-        return unsub; 
+            let videos = snapshot.docs.map(doc => doc.data());
+             let videoArr = [];
+             for(let i = 0 ; i < videos.length ; i++){
+                 let videoUrl = videos[i].url;
+                 console.log(videos[i]);
+                 let auid = videos[i].auid;
+                 let id = snapshot.docs[i].id;
+
+                 let userObject = await database.users.doc(auid).get();
+                 let userProfileUrl = userObject.data().profileUrl;
+                 let userName = userObject.data().username;
+                 videoArr.push({
+                     videoUrl , userProfileUrl , userName , 
+                     puid: id
+                 });
+             }
+
+             setVideos(videoArr);
+
+        // })
+            })
+        return unsub;
     },[])
 
             // try{
@@ -182,15 +245,18 @@ function Feed() {
                 </label>
             </div>
             <div className="feed">
-                {videos.map((videoObj , idx ) => {
+                {videos.map((videoObj  ) => {
                     console.log(videoObj);
                     return <div className="video-container">
                         <Video src={videoObj.videoUrl}
-                                id ={idx}
+                                id ={videoObj.puid}
                                 userName={videoObj.userName}>
 
 
                         </Video>
+                        <FavouriteIcon className={[classes.heart, isLiked == false ? classes.notSelected : classes.selected]}
+                            onClick={() => { handleLiked(videoObj.puid) }}
+                        ></FavouriteIcon>
                         </div>
                 })}
             </div>
