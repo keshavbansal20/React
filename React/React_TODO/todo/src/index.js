@@ -6,10 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import Todo2 from "./Component/Todo2";
 import Test2 from "./Component/Test2";
 ReactDOM.render(  
-    // <App />
+    <App />
     // <Todo2></Todo2>,
 
-    <Test2></Test2>
+    // <Test2></Test2>
     ,  document.getElementById('root') );
 
 // If you want to start measuring performance in your app, pass a function

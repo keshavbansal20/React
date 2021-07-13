@@ -1,7 +1,8 @@
-import React, { Component   , useState} from 'react';
+import React, { useState} from 'react';
 import { connect } from "react-redux"
 
 function Bat(props){
+      // const [bat, setBat] = useState(5);
     const [value, setValue] = useState("");
     return(
         <div>
@@ -20,10 +21,12 @@ function Bat(props){
         </div>
     )
 }
+
+// 5 -> provide state variables from store
 const mapStateToProps = store => {
     console.log("in map state to prop" , store);
-
-    return store.Bat;
+ // state variables change  
+    return store.Bat; //store se Bat wala reducer mangaya
 }
 
 //dispatch

@@ -80,7 +80,7 @@ class TaskList extends Component {
     render() { 
         return (
             <div className="task-list">
-                <ul >
+                 <ul >
                     {this.props.list.map((taskobj)=>{
                         return(
 

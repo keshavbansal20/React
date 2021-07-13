@@ -6,15 +6,19 @@ import Ball from './Component/Ball';
 import Bat from './Component/Bat';
 import store from "./store";
 import { Provider } from "react-redux";
+import InputContainer from './Component/InputContainer';
+import TaskList from "./Component/TaskList";
 function App() {
   return (
     //4
    
-   
-    <Provider store={store}>
+    //Provider provides the store to the component in App like ball and bat
+    // <Ball></Ball>
+    // <Bat></Bat>
+    <Provider store={store}> 
       <div className="App">
-        <Ball></Ball>
-        <Bat></Bat>
+        <InputContainer></InputContainer>
+        <TaskList></TaskList>
       </div>
     </Provider>
   );
