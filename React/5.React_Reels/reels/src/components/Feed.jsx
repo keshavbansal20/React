@@ -7,6 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import uuid from 'react-uuid';
 import FavouriteIcon from '@material-ui/icons/Favorite';
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import Overlay from "./Overlay";
 
 import {database , storage} from "../firebase";
 function Feed() {
@@ -19,13 +21,20 @@ function Feed() {
         input: {
             display: 'none',
         },
-        heart: {
+        icon: {
             // backgroundColor: "red"
             position: "absolute",
             left: "27vw",
             bottom: "-5vh",
             fontSize: "2rem"
         },
+        heart:{
+            left:"25vw",
+        }
+        chat:{
+            left:"32vw"
+        } ,
+
         notSelected: {
             color: "lightgray"
         }
@@ -63,6 +72,16 @@ function Feed() {
             })
         }
         setLiked(!isLiked);
+    }
+
+    const handleCommentClicked = async (puid)=>{
+        let copyofVideos = [...videos];
+        let idx = copyofVideos.findIndex((video) => {
+            return video.puid==puid;
+        });
+        let videoObj = copyofVideos[idx];
+        videoObj.isOverlayActive = true;
+        setVideos(copyofVideos);
     }
     const handleLogout = async () => {
         try{

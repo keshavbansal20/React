@@ -6,7 +6,9 @@ export default class MoviePage extends Component {
         movies:getMovies(),
         currSearchText:"",
         limit:4 ,
-        currentPage:1
+        currentPage:1,
+        cGenre:"All Genres",
+        genres:getMovies().json()
     }
 
     setCurrSearchText =(e) => {
@@ -34,12 +36,26 @@ export default class MoviePage extends Component {
             limit:currLimit
         })
     }
+
+    changeCurrentPage=(pageNumber) => {
+        this.setState({
+            currentPage:pageNumber
+        })
+    }
+
+    groupBygenre = (name)=> {
+        this.setState({
+            cGenre:name, 
+            currSearchText:""
+        })
+    }
     
     
     render() {
         console.log(this.state.movies)
-        let {movies,currentPage, limit, currSearchText}=this.state;
+        let {movies,currentPage,cGenre ,genres, limit, currSearchText}=this.state;
         let filteredArr=movies;
+        console.log(genres)
         if(currSearchText!=""){
              
             filteredArr =  filteredArr.filter((movieobj)=>{
@@ -50,8 +66,16 @@ export default class MoviePage extends Component {
             console.log("hello",filteredArr)
         }
         let pageNumberArr=[];
-        for(let i= 0;i<pa)
+        
         let numberofPage = Math.ceil(filteredArr.length/limit);
+        for(let i =0 ; i < numberofPage;i++){
+            pageNumberArr.push(i+1);
+        }
+        //impliment
+        //si-->(pageNumber-1)*limit;
+        //eidx--> si+limit;
+        //number of pages
+        // //paginate
         let si = (currentPage-1)*limit;
         let eidx =si+limit;
         filteredArr = filteredArr.splice(si ,eidx);
@@ -61,7 +85,9 @@ export default class MoviePage extends Component {
             <div>
                 <div className="row">
                     
-                    <div className="col-3">hello</div>
+                    <div className="col-3">
+              
+                    </div>
                     <div className="col-9">
                     <input type="search" placeholder="Enter Movie" value={this.currSearchText} onChange={this.setCurrSearchText} ></input>
                     <input type="number"  value={limit} className="col-2" onChange={this.changeLimit}></input>
@@ -76,40 +102,46 @@ export default class MoviePage extends Component {
 
                       </tr>
                     </thead>
-                    <tbody>
-                    {filteredArr.map((movieObj)=>{
-                        return(
-                            <tr>
-                                <td></td>
-                                <td>{movieObj.title}</td>
-                                <td>{movieObj.genre.name}</td>
-                                <td>{movieObj.dailyRentalRate}</td>
-                                <td>{movieObj.numberInStock}</td>
-                                <td><button type="button" className="btn btn-danger"
-                                onClick={()=> {
-                                   this.deleteEntry(movieObj.title);
-                                }}>Delete</button></td>
-                                
-                            </tr>
-                        )
-                    })}
-                      
-                      
+                     <tbody>
+                         {filteredArr.map((movieObj)=>{
+                            return(
+                                <tr>
+                                    <td></td>
+                                    <td>{movieObj.title}</td>
+                                    <td>{movieObj.genre.name}</td>
+                                    <td>{movieObj.dailyRentalRate}</td>
+                                    <td>{movieObj.numberInStock}</td>
+                                    <td><button type="button" className="btn btn-danger"
+                                    onClick={()=> {
+                                    this.deleteEntry(movieObj.title);
+                                    }}>Delete</button></td>
+                                    
+                                </tr>
+                            )
+                        })}
                       </tbody>
-                      </table>
-                      <nav aria-label="...">
-                        <ul class="pagination">
-                         pageNumberArr.filter(())
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item active">
-                            <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            
+                    </table>
+                      <nav aria-label="..." className="col-2">
+                      <ul class="pagination">
+                        {
+                            pageNumberArr.map((pageNumber) => {
+                                let additional = pageNumber == currentPage?"page-item active":"page-item";
+                                return (
+                                    <li class={additional}
+                                    aria-current="page" onClick={()=>{this.changeCurrentPage(pageNumber)}}>
+                                    <span class="page-link" href="#">{pageNumber}</span>
+                                    </li>
+                                )
+                            })
+                        }
+                      
+                        
+                        
                         </ul>
-                      </nav>
-                    </div>
-
+                        </nav>
+                        
+                        </div>
+                        
 
                 </div>
             </div>

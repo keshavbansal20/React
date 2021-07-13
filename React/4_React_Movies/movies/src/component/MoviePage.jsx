@@ -161,7 +161,7 @@ export default class MoviePage extends Component {
                                         Rate
                                     <i className = "fas fa-sort-down" onClick={this.sortByRatings}/>
                                 </th>
-                                <th scope="col">
+                                <th scope="col">    
                                     <i className = "fas fa-sort-up" onClick={this.sortByStock}/>
                                         Stock
                                     <i className = "fas fa-sort-down" onClick={this.sortByStock}/>
