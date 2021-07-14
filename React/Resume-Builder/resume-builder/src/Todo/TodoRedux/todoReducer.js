@@ -11,6 +11,7 @@ function todoReducer(state = initialState , action){
             console.log(action.payload);
             let newObject = {
                 // ...state , 
+                
                 taskList: [...state.taskList , {id:state.taskList+1 , task:action.payload}] ,
             }
             return newObject
@@ -18,13 +19,16 @@ function todoReducer(state = initialState , action){
             let filteredList = state.taskList.filter(function(task){
                 return task.id!=action.payload
             })
-            return (
-                // taskList:filteredList;
-                 state.taskList= filteredList
-                
 
+            // let nobj= {
+            //     taskList: [filteredList]
+            // }
+            // return nobj
+            return (
+                {
+                    taskList:filteredList
+                }
             )
-        
         default:
             return state;
     }

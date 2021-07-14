@@ -5,7 +5,7 @@ function TaskList(props) {
   
     console.log(props.taskList);
      let { taskList , deletetask} = props;
-     console.log(taskList)
+     console.log(taskList);
     return (
         <div className="task-list">
         <ul>
