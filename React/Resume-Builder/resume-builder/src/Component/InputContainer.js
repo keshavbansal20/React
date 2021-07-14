@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import { connect } from "react-redux"
 
+
 function InputContainer(props) {
     const[value , setTask] = useState("");
     return (
@@ -38,6 +39,7 @@ const mapDispatchedtoProps = dispatch => {
         setTask:(val) => {
             dispatch({
                 type:"input_item" ,
+                
                 //data send to reducer function
                 payload:val
             })
