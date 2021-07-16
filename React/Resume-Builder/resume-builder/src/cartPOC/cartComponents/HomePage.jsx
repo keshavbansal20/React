@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from "react-redux";
 function HomePage(props) {
-    let { products } = props;
+    let { products , addToBasket } = props;
     return (
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex"  }}>
             {products.map(product => {
                 return (
                     <div key={product.id}>
@@ -11,10 +11,9 @@ function HomePage(props) {
                         <h2>{product.title}</h2>
                         <div>{product.description}</div>
                         <h3>{product.price}</h3>
-                        <button onClick={()=>{
-                            props.setCartCount();
+                        <button onClick={()=>{addToBasket(product)}}
                             
-                        }} >Add to Cart</button>
+                         >Add to Cart</button>
                     </div>
                 )
 
@@ -31,14 +30,22 @@ const mapDispatchedtoProps = dispatch => {
     //action
     //handler function
     return{
-        setCartCount:() => {
+         addToBasket : (product) => {
+            // dispatch the item into the data layer
             dispatch({
-                type:"add_to_cart" 
-                //data send to reducer function
-                
-            })
+                type: "ADD_TO_BASKET",
+                item: {
+                  id: product.id,
+                  title: product.title,
+                  image: product.image,
+                  description:product.description,
+                  price: product.price,
+                  quanity:1
+                  
+                },
+              });
         }
-    }
+}
 }
 
 const HigherOrderComponent = connect(mapStateToProps,mapDispatchedtoProps)(HomePage);

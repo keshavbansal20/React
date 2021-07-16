@@ -1,12 +1,19 @@
 import React from 'react'
 import {connect} from "react-redux";
+import { Link } from "react-router-dom";
 function NavBar(props) {
-    const cartCount = props.cardCount;
+    let { basket} = props;
+    console.log(basket)
+    
     return (
 
         <div style={{ height: "3rem", backgroundColor: "lightgray", color: "black", fontSize: "150%", }}>
-            NavBar
-            <span style={{ marginLeft: "4rem" }}>{cartCount}</span>
+        NavBar
+        {/* <a href="/cart"></a>*/}   
+        <Link to="/cart">
+        <span style={{ marginLeft: "4rem" }} > {basket?.length}</span>
+        
+        </Link>
         </div>
     )
 }
@@ -18,3 +25,4 @@ const mapStateToProps = store => {
 
 const HigherOrderComponent = connect(mapStateToProps)(NavBar);
 export default HigherOrderComponent;
+// export default NavBar;
