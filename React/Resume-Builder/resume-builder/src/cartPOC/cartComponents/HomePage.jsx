@@ -1,6 +1,10 @@
 import React from 'react'
+import { Link } from "react-router-dom";
+
 import { connect } from "react-redux";
+import ProductPage from './ProductPage';
 function HomePage(props) {
+
     let { products , addToBasket } = props;
     return (
         <div style={{ display: "flex"  }}>
@@ -14,6 +18,10 @@ function HomePage(props) {
                         <button onClick={()=>{addToBasket(product)}}
                             
                          >Add to Cart</button>
+                         <Link to="/Product">
+                            View Product
+                         </Link>
+                         
                     </div>
                 )
 

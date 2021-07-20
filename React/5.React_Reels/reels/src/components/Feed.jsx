@@ -30,7 +30,7 @@ function Feed() {
         },
         heart:{
             left:"25vw",
-        }
+        },
         chat:{
             left:"32vw"
         } ,
@@ -199,12 +199,16 @@ function Feed() {
                  let userProfileUrl = userObject.data().profileUrl;
                  let userName = userObject.data().username;
                  videoArr.push({
-                     videoUrl , userProfileUrl , userName , 
-                     puid: id
+                     videoUrl , 
+                     userProfileUrl , 
+                     userName , 
+                     puid: id , 
+                     isOverlayActive:false
                  });
              }
 
              setVideos(videoArr);
+            //  userName = {videoObj.userName}>
 
         // })
             })
@@ -269,13 +273,15 @@ function Feed() {
                     return <div className="video-container">
                         <Video src={videoObj.videoUrl}
                                 id ={videoObj.puid}
-                                userName={videoObj.userName}>
-
-
+                                userName={videoObj.userName}
+                        >
                         </Video>
                         <FavouriteIcon className={[classes.heart, isLiked == false ? classes.notSelected : classes.selected]}
                             onClick={() => { handleLiked(videoObj.puid) }}
                         ></FavouriteIcon>
+                        <ChatBubbleIcon className={[classes.icon, classes.chat, classes.notSelected]} onClick={() => { handleCommentClicked(videoObj.puid) }}>
+                        </ChatBubbleIcon>
+                        {videoObj.isOverlayActive == true ? <Overlay></Overlay>:null}
                         </div>
                 })}
             </div>

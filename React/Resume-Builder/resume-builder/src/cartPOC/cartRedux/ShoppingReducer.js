@@ -4,6 +4,7 @@ let initialState ={
     products ,
     coupons,
     basket:[],
+    itemQuanity:[]
     // amount:getBasket
     }
 
@@ -75,7 +76,26 @@ export const getBasketTotal = (basket) =>
                 ...state,
                 amt,
                 ramt
-            }     
+            }    
+        
+            case "set_total":
+                console.log(action);
+                
+                const idx = state.itemQuanity.findIndex(
+                    (itemobj)=> itemobj.id==action.item.id
+                )
+                let itemquanityArr=0;
+                if(idx==-1){
+                     itemquanityArr = [ action.item]
+                }
+                console.log(idx);
+                console.log(itemquanityArr);
+                return{
+                    ...state ,
+                    itemQuanity:itemquanityArr
+
+                    
+                }
         default:
             return state;
     }

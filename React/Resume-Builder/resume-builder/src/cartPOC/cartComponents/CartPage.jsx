@@ -1,9 +1,12 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { connect } from "react-redux";
 import SubTotal from './SubTotal';
 function CartPage(props) {
-    const { basket , removefrombasket }  = props;
+    const { basket , removefrombasket , setTotal , itemQuanity }  = props;
     console.log(basket)
+    console.log(itemQuanity)
+    const [quantity , setQuanity ] = useState(1);
+    console.log(quantity)
     return(
         <div className="cartpage" style={{display:"flex"}}>
             <div classname="cartpage-left">
@@ -23,7 +26,14 @@ function CartPage(props) {
                             <img src={baskobj.image} style={{height:"60vh"}}></img>
                             <div className="product_info" >
                             <div className="title">{baskobj.title}</div>
-                            <input type="number" placeholder={baskobj.quantity} style={{width:"5vw"}}></input>
+                            <input type="number"  style={{width:"5vw"}} 
+                                onChange = {(e)=>{
+                                    setQuanity(e.target.value);
+                                }}
+                            onClick={()=>
+                                {
+                                setTotal(baskobj , quantity)
+                                }}></input>
                             <p style={{width:"35vw"}}>{baskobj.description}</p>
                             <button onClick={()=>{
                                 removefrombasket(baskobj)
@@ -68,6 +78,18 @@ const mapDispatchedtoProps = dispatch => {
             dispatch({
                 type: "remove_from_basket",
                 id:baskobj.id,
+              });
+        } ,
+        setTotal : (baskobj , quant) => {
+            // dispatch the item into the data layer
+            dispatch({
+                type: "set_total",
+                item:{
+                    id:baskobj.id,
+                    value:quant
+
+                }
+               
               });
         }
 }
