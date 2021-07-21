@@ -1,46 +1,73 @@
 import React,{useEffect , useState , useContext} from 'react';
 import { AuthContext } from '../contexts/AuthProvider';
 import { storage , firestore , database} from "../firebase";
-import {Link ,  Typography , Card ,CardMedia, makeStyles ,CardContent, TextField , Button , IconButton} from '@material-ui/core';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+// import {Link ,  Typography , Card ,CardMedia, makeStyles ,CardContent, TextField , Button , IconButton} from '@material-ui/core';
+import { Grid, makeStyles, TextField, Button, Card, CardMedia, Typography, LinearProgress } from '@material-ui/core';
+import BackupIcon from '@material-ui/icons/Backup';
+import { Link } from 'react-router-dom';
 // import LinkButton from "./Login"
 export default function Signup() {
-    const [email , setEmail ]= useState("");
-    const [username , setUserName] = useState("");
-    const[password , setPassword] = useState("");
-    const[error ,setError] = useState(false);
-    const [loader , setLoader] = useState(false);
-    const [file , setFile] = useState(null);
-    let { signup } = useContext(AuthContext);
-
-    let useStyles = makeStyles({
-        // centerDiv:{
-        //     display:"flex" ,
-        //     // height:,
-        //     justifyContent:"center" , 
-        //     alignItems:"center"
-
-        // },
-        image:{
-            height:"10vh" , 
-            backgroundSize:"contain"    
+    const useStyles = makeStyles({
+        mainContainer: {
+            height: "100vh",
+            width: "75vw",
+            // backgroundColor: "lightgreen",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "auto"
         },
-
-        fullwidth:{
-            width:"100%"
-        }
     })
-    let classes = useStyles();
-    function handleFileSubmit(e) {
-        let file= e?.target?.files[0];
-        if(file!=null){
-            // console.log(e.target.files[0],"hello");
-            console.log(e.target.files[0]);
-            setFile(e.target.files[0]);
+    const classes = useStyles();
+
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [userBio, setUserBio] = useState("");
+    const [loader, setLoader] = useState(false);
+    const [error, setError] = useState("");
+    const [file, setFile] = useState(null);
+    const { signup } = useContext(AuthContext);
+
+    const handleFileInput = (e) => {
+        // Optional Chaining, if exists value else undefined
+        let file = e?.target?.files[0];
+
+        if (file) {
+            console.log(file);
+            setFile(file);
         }
     }
 
-    async function handleSignup(e) {
+    // let useStyles = makeStyles({
+    //     // centerDiv:{
+    //     //     display:"flex" ,
+    //     //     // height:,
+    //     //     justifyContent:"center" , 
+    //     //     alignItems:"center"
+
+    //     // },
+    //     image:{
+    //         height:"10vh" , 
+    //         backgroundSize:"contain"    
+    //     },
+
+    //     fullwidth:{
+    //         width:"100%"
+    //     }
+    // })
+    // let classes = useStyles();
+    // function handleFileSubmit(e) {
+    //     let file= e?.target?.files[0];
+    //     if(file!=null){
+    //         // console.log(e.target.files[0],"hello");
+    //         console.log(e.target.files[0]);
+    //         setFile(e.target.files[0]);
+    //     }
+    // }
+
+
+    async function handleSignUp(e) {
         e.preventDefault();
         try{
             setLoader(true);
@@ -65,13 +92,15 @@ export default function Signup() {
                 // link get 
                 let downloadurl = await
                     uploadTaskListener.snapshot.ref.getDownloadURL();
+                    console.log(downloadurl)
                 database.users.doc(uid).set({
                     email: email,
                     userId: uid,
                     username,
                     createdAt: database.getUserTimeStamp(),
-                    profileUrl: downloadurl , 
-                    postIds:[]
+                    profileImageURL: downloadurl , 
+                    postIds:[],
+                    userBio
                 })
                 setLoader(false);
                 this.props.history.push("/");
@@ -82,33 +111,165 @@ export default function Signup() {
         }
     }
     return (
-        <div>
-        <form onSubmit={handleSignup}>
-        <div>
-                <label htmlFor="">UserName</label>
-                <input type="text" value={username}
-                onChange={(e) => {setUserName(e.target.value)}}/>
-            </div>
-            <div>
-                <label htmlFor="">Email</label>
-                <input type="text" value={email}
-                onChange={(e) => {setEmail(e.target.value)}}/>
-            </div>
-            <div>
-                <label htmlFor="">Password</label>
-                <input type="password" value={password}
-                onChange={(e) => {setPassword(e.target.value)}}/>
-            </div>
-            <div>
-                <label htmlFor="">Profile Image</label>
-                <input type="file" accept="image/*"
-                onChange={(e) => {handleFileSubmit(e)}}/>
-            </div>
+        <>
+            <Grid container className={classes.mainContainer} spacing={3}>
+                <Grid item xs={12} sm={9} md={7} lg={5}>
+                    {loader ? <LinearProgress color="secondary" /> : null}
+                    <Card variant="outlined"
+                        style={{ padding: "1rem" }}>
+                        <CardMedia
+                            image="https://www.logo.wine/a/logo/Instagram/Instagram-Wordmark-Black-Logo.wine.svg"
+                            style={{ backgroundSize: "contain", height: "10rem", }} />
+                        <Grid container spacing={1}>
+                            <Grid
+                                item xs={12} sm={12} md={12} lg={12}>
+                                <Typography
+                                    style={{ textAlign: "center" }}
+                                    variant="h6"
+                                    gutterBottom
+                                    size="small"
+                                    style={{ color: "#8395a7", textAlign: "center" }}>
+                                    Sign up to see photos and videos from your friends.
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                item xs={12} sm={12} md={12} lg={12}>
+                                <TextField
+                                    id="outlined-email-input"
+                                    label="Email"
+                                    type="email"
+                                    variant="outlined"
+                                    value={email}
+                                    fullWidth={true}
+                                    size="small"
+                                    onChange={(e) => { setEmail(e.target.value) }}
+                                />
+                            </Grid>
+                            <Grid
+                                item xs={12} sm={12} md={12} lg={12}>
+                                <TextField
+                                    id="outlined-password-input"
+                                    label="Password"
+                                    type="password"
+                                    variant="outlined"
+                                    value={password}
+                                    fullWidth={true}
+                                    size="small"
+                                    onChange={(e) => { setPassword(e.target.value) }}
+                                />
+                            </Grid>
+                            <Grid
+                                item xs={12} sm={12} md={12} lg={12}>
+                                <TextField
+                                    id="outlined-username-input"
+                                    label="Username"
+                                    type="text"
+                                    variant="outlined"
+                                    value={username}
+                                    fullWidth={true}
+                                    size="small"
+                                    onChange={(e) => { setUsername(e.target.value) }}
+                                />
+                            </Grid>
+                            <Grid
+                                item xs={12} sm={12} md={12} lg={12}>
+                                <TextField
+                                    id="outlined-username-input"
+                                    label="Bio"
+                                    type="text"
+                                    variant="outlined"
+                                    value={userBio}
+                                    fullWidth={true}
+                                    size="small"
+                                    onChange={(e) => { setUserBio(e.target.value) }}
+                                />
+                            </Grid>
+                            <Grid
+                                item xs={12} sm={12} md={12} lg={12}>
+                                <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    fullWidth={true}
+                                    size="medium"
+                                    onChange={(e) => { handleFileInput(e) }}
+                                    startIcon={<BackupIcon />}>UPLOAD PROFILE IMAGE
+                                    <TextField
+                                        type="file"
+                                        style={{ opacity: "0", position: "absolute", width: "100%", height: "100%" }}>
+                                    </TextField>
+                                </Button>
+                            </Grid>
+                            <Grid
+                                item xs={12} sm={12} md={12} lg={12}>
+                                <Button
+                                    variant="contained"
+                                    // color="primary"
+                                    fullWidth={true}
+                                    style={{ backgroundColor: "#2e86de", color: "#ffffff" }}
+                                    size="medium"
+                                    disabled={loader}
+                                    onClick={handleSignUp}>SIGN UP
+                                </Button>
+                            </Grid>
+                            <Grid
+                                item xs={12} sm={12} md={12} lg={12}>
+                                <Typography
+                                    style={{ textAlign: "center" }}
+                                    variant="body2"
+                                    gutterBottom
+                                    size="small">
+                                    By signing up, you agree to our Terms, Data Policy and Cookies Policy.
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Card>
+                    <Card
+                        variant="outlined"
+                        style={{ marginTop: "2rem" }}>
+                        <Typography
+                            style={{ textAlign: "center", padding: "0.5rem" }}
+                            variant="body1"
+                            gutterBottom>
+                            Have an account? <LinkButton content="Log In"
+                                routeLink="/login" />
+                        </Typography>
+                    </Card>
+                </Grid>
+            </Grid>
+        </>
+    );
+}
+function LinkButton({ content, routeLink }) {
+    return (
+        <Link style={{ textDecoration: "none", color: "#2e86de" }} to={routeLink}>{content}</Link>
+    );
+}
+        // <div>
+        // <form onSubmit={handleSignup}>
+        // <div>
+        //         <label htmlFor="">UserName</label>
+        //         <input type="text" value={username}
+        //         onChange={(e) => {setUserName(e.target.value)}}/>
+        //     </div>
+        //     <div>
+        //         <label htmlFor="">Email</label>
+        //         <input type="text" value={email}
+        //         onChange={(e) => {setEmail(e.target.value)}}/>
+        //     </div>
+        //     <div>
+        //         <label htmlFor="">Password</label>
+        //         <input type="password" value={password}
+        //         onChange={(e) => {setPassword(e.target.value)}}/>
+        //     </div>
+        //     <div>
+        //         <label htmlFor="">Profile Image</label>
+        //         <input type="file" accept="image/*"
+        //         onChange={(e) => {handleFileSubmit(e)}}/>
+        //     </div>
         
-            <button type="submit" disabled={loader}>Login</button>
-        </form>
-        </div>
-    )}
+        //     <button type="submit" disabled={loader}>Login</button>
+        // </form>
+        // </div>
         // <div className={classes.centerDivs}>
         //  <Card >
         //     <CardMedia 
