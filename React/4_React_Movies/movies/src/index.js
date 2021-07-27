@@ -8,12 +8,12 @@ import Hooks from "./Hooks";
 import Login from "./Login"
 import App2 from "./App2";
 ReactDOM.render(
-  // <BrowserRouter>
-  //   <App />
-  // </BrowserRouter>,
-  <App2></App2>,
-  // <Hooks></Hooks>,
-  // <Login></Login> ,
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  // <App2></App2>,
+  // // <Hooks></Hooks>,
+  // // <Login></Login> ,
   document.getElementById('root')
 );
 

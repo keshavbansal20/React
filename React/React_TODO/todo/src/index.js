@@ -1,12 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'; // react dom 
 // import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Todo2 from "./Component/Todo2";
 import Test2 from "./Component/Test2";
+//in class based component we used reactdom.render and pass the App component which has to be render first on website running
+
 ReactDOM.render(  
-    <App />
+    <App /> 
     // <Todo2></Todo2>,
 
     // <Test2></Test2>
