@@ -5,13 +5,32 @@ import {fieldCd, skinCodes}  from '../../constants/typeCodes';
 // import * as contactActions from '../../actions/contactActions';
 // import { bindActionCreators } from 'redux';
 // import { withRouter } from "react-router-dom";
+
+import * as taskActions from "../../redux/actionTypes";
 import { useHistory } from "react-router-dom";
 import ResumePreview from './resumePreview'
+import { connect } from "react-redux";
+import { withRouter} from "react-router-dom";
 // import { connect } from "react-redux";
 
 function Contact(props) {
    let history = useHistory();
-   const [contact,setContact]= useState(props.contactSection);
+    console.log(props)
+   let initFormState = {
+    [fieldCd.FirstName]: "",
+    [fieldCd.LastName]: "",
+    [fieldCd.ProfSummary]: "",
+    [fieldCd.Email]: "",
+    [fieldCd.Phone]: "",
+    [fieldCd.Profession]: "",
+    [fieldCd.Street]: "",
+    [fieldCd.City]: "",
+    [fieldCd.State]: "",
+    [fieldCd.Country]: "",
+    [fieldCd.ZipCode]: ""
+    }
+
+   const [contact,setContact]= useState(initFormState);
 //    useEffect(() => {
 //        if(!props.document || !props.document.id || !props.document.skinCd)
 //        {
@@ -31,7 +50,18 @@ function Contact(props) {
         // else{
         //     props.addContact(props.document.id,contact);
         // }
-
+        // let keys = Object.keys(props.contact);
+        // if(keys.length==0){
+        //     props.setContact(contact);
+        // } else{
+        //     props.up
+        // }
+        let keys = Object.keys(props.contact)
+        if(keys.length==0){
+            props.setContact(contact);
+        } else {
+            props.updateContact(contact);
+        }
         history.push('/education');
     }
 
@@ -43,6 +73,12 @@ function Contact(props) {
         return "";
     }
 
+    useEffect(()=>{
+        let keys = Object.keys(props.contact);
+        if(keys.length!=0){
+            setContact(props.contact);
+        }
+    },[]);
     //field m data kese change ho rha hai 1.given then unique id(fieldCd.FirstName etc)
                                         // 2. then on change function run ( key , value set hojata hai setcontach se , key[event.target.name])
                                         //3.then again rendering happen
@@ -130,6 +166,7 @@ function Contact(props) {
                 </div>
 
                 <div className="preview-card">
+                { console.log(props)}
                     <ResumePreview contactSection={contact} skinCd={props?.document?.skinCd}></ResumePreview>
                 </div>
 
@@ -137,7 +174,29 @@ function Contact(props) {
         </div>
     );
 }
+function mapStatetoProps(store){
+    return {
+        document:store.document,
+        contact:store.contact
+    }
+}
+function mapDispatchToProps(dispatch){
+    return{
+        setContact:(object)=>{
+            dispatch({
+                type:taskActions.ADD_CONTACT , 
+                payload:object
+           })
+        } , 
+        updateContact:(object) => {
+            dispatch({
+                type:taskActions.UPDATE_CONTACT , 
+                payload:object 
+            })
+        }
+    }
+}
 
+export default withRouter(connect(mapStatetoProps , mapDispatchToProps)(Contact));
 
-export default Contact
 

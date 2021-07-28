@@ -1,17 +1,30 @@
-import React,{useState} from "react";
+import React,{useState , useEffect} from "react";
 import { NavLink } from 'react-router-dom';
 import { withRouter } from "react-router-dom";
 import ResumePreview from './resumePreview'
+
 import {skinCodes, fieldCd} from './../../constants/typeCodes';
 // import { connect } from 'react-redux'
 // import * as educationActions from '../../actions/educationActions';
 // import {bindActionCreators} from 'redux';
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import * as taskActions from "../../redux/actionTypes";
 
 function Education(props) {
   console.log('Education');
+
   let history = useHistory();
-  const [education,setEducation]= useState(props.educationSection);
+  let initFormState={
+    [fieldCd.SchoolName]:"" , 
+    [fieldCd.Degree]:"" , 
+    [fieldCd.GraduationCGPA]:"" , 
+    [fieldCd.City]:"" , 
+    [fieldCd.GraduationDate]:"" , 
+    [fieldCd.GraduationYear]:"" , 
+
+  }
+  const [education,setEducation]= useState(initFormState);
 
   const onchange = (event) => {
     var key =event.target.name;
@@ -31,9 +44,24 @@ function Education(props) {
     // }else{
     //     props.addEducation(props.document.id,education);
     // }
+    let keys = Object.keys(props.contact);
+    if(keys.length == 0){
+      props.setEducation(education);
+    }else {
+      //update
+      props.updateEducation(education);
+    }
+    //props update
+    //education update
      history.push('/finalize')
   }
 
+  useEffect( ()=>{
+    let keys = Object.keys(props.education);
+    if(keys.length!=0){
+      setEducation(props.education);
+    }
+  },[]);
     
     return (
       <div className="container med education" >
@@ -90,17 +118,44 @@ function Education(props) {
             </div>
           </div>
           <div className="preview-card">
-            <ResumePreview contactSection={props.contactSection} educationSection={education} skinCd={props?.document?.skinCd}></ResumePreview>            
+            <ResumePreview contactSection={props.contact} educationSection={education} skinCd={props?.document?.skinCd}></ResumePreview>            
           </div>
         </div>
       </div>
     );
   }
 
+function mapStatetoProps(store){
+  return{
+    document:store.document , 
+    contact:store.contact,
+    education:store.education
+  }
+}
 
+function mapdispatchtoProps(dispatch){
+  return{
+    setEducation:(object)=>{
+      dispatch({
+        type:taskActions.ADD_EDUCATION , 
+        payload:object 
+      })
+      
+    
+    }
+    ,
+    updateEducation:(object)=>{
+      dispatch({
+        type:taskActions.UPDATE_EDUCATION ,
+        payload:object
+      })
+    }
+
+  }
+}
 
   
 
 
-export default Education
+export default withRouter(connect(mapStatetoProps ,mapdispatchtoProps)(Education));
 

@@ -2,6 +2,8 @@ import React from "react";
 import ResumePreview from './resumePreview'
 import  jsPDF  from "jspdf";
 import html2canvas from 'html2canvas';
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
    function Finalize(props) {
     let educationSection= props.educationSection
@@ -32,7 +34,7 @@ import html2canvas from 'html2canvas';
       <div className="container full finalize-page" >
       <div className="funnel-section ">
           <div className="finalize-preview-card " id="resumePreview">
-            <ResumePreview contactSection={contactSection} educationSection={educationSection} skinCd={props?.document?.skinCd}></ResumePreview>   
+            <ResumePreview contactSection={props.contact} educationSection={props.education} skinCd={props?.document?.skinCd}></ResumePreview>   
           </div>
           <div className="finalize-settings center">            
 
@@ -57,6 +59,13 @@ import html2canvas from 'html2canvas';
     
 }
 
+function mapStatetoProps(store){
+  return {
+    contact:store.contact , 
+    document:store.document , 
+    education:store.education , 
+  }
+}
 
-
-export default (Finalize)
+export default withRouter(connect(mapStatetoProps)(Finalize));
+// export default (Finalize)

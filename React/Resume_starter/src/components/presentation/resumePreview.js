@@ -43,4 +43,6 @@ function ResumePreview(props){
             </div>
         )
     }
+
+
 export default ResumePreview;
