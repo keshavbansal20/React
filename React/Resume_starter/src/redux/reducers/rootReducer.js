@@ -2,10 +2,15 @@ import { combineReducers } from "redux";
 import documentReducer from "./documentReducer";
 import contactReducer from "./contactReducer";
 import educationReducer from "./educationReducer";
-const rootreducer = combineReducers({
-    document:documentReducer,
-    contact:contactReducer,
-    education:educationReducer
+import { firestoreReducer } from 'redux-firestore';
+import { firebaseReducer } from "react-redux-firebase";
+import authReducer from "./authReducer";
+const rootReducer = combineReducers({
+    document: documentReducer,
+    contact: contactReducer,
+    education: educationReducer,
+    firebase: firebaseReducer,
+    firestore: firestoreReducer,
+    auth:authReducer
 })
-
-export default rootreducer;
+export default rootReducer;

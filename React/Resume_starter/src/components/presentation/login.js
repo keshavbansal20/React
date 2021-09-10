@@ -5,6 +5,8 @@ import update from 'immutability-helper';
 // import * as authActions from '../../actions/authActions';
 // import { isLoaded } from 'react-redux-firebase'
 import { useHistory } from "react-router";
+import { connect } from "react-redux";
+import * as authMiddleWare from "../../redux/reducers/authMiddleWare";
 
   function Login(props) {
     console.log(props);
@@ -22,11 +24,16 @@ setEmail(e.target.value);
 const handlePassword=(e)=>{
   setPassword(e.target.value);
 }
+useEffect(()=>{
+  if(props.auth?.uid){
+    history.push('/');
+  }
+},[props])
     const onSubmit=()=>{
+        let obj = { email: email , password:password}
+        console.log(obj);
+        props.signIn(obj);
     
-      // let obj = {email:email,password:password}
-      // console.log(obj)
-      // props.signIn(obj)
     }
 
 
@@ -68,8 +75,21 @@ const handlePassword=(e)=>{
   }
 
 
-
- 
-
-
-  export default Login
+  const mapStateToProps = (state) => {
+    //  actual user data -> auth
+    // auth mine -> loading error 
+    return {
+      auth: state.firebase.auth,
+      authMine: state.auth
+    }
+  }
+  const mapDispatchtoProps = (dispatch) => {
+    // async work 
+  
+    return {
+      signIn:
+        (userData) => { dispatch(authMiddleWare.signIn(userData)) }
+  
+    }
+  }
+  export default connect(mapStateToProps, mapDispatchtoProps)(Login)

@@ -1,12 +1,15 @@
 import React from "react";
+import { connect } from "react-redux";
+import { isLoaded ,isEmpty } from "react-redux-firebase";
 import { NavLink } from "react-router-dom";
 import logo from "../../static/images/logo.png";
 
+// import connect from "react-redux";
 function LoggesOut(props) {
   return (
     <ul>
       <li className="signup ">
-        <NavLink className=" btnv-1" to="/register">
+        <NavLink className="btnv-1" to="/register">
         Register
         </NavLink>
       </li>
@@ -21,7 +24,8 @@ function LoggesOut(props) {
 
 
 const Header = (props) => {
-  // const auth = props.auth;
+
+  const auth = props.auth;
   const handleLogOut=()=>{
    console.log('The user will sign out');
   }
@@ -37,12 +41,10 @@ const Header = (props) => {
       </a> 
         <div className="header-links full-height">
 
-        {/* { isLoaded(auth) && !isEmpty(auth) ?<> */}
-        
-        {/*sign in and sign out routes link */}
+        {isLoaded(auth) && !isEmpty(auth) ?
           <ul>
             <li className="signin ">
-              <NavLink className="  " to="/">
+              <NavLink className="  " to="/login">
                Logged in as 
               </NavLink>
             </li>
@@ -51,9 +53,8 @@ const Header = (props) => {
              Signout
               </button>         
             </li>
-          </ul>
-
-        {/* </>:<LoggesOut></LoggesOut>} */}
+          </ul> : <LoggesOut></LoggesOut>
+        }
           {/*ul contain routers for resume templates and about us */}
           <ul id="nav-mid">
             <li>
@@ -77,14 +78,14 @@ const Header = (props) => {
   );
 };
 
-// const mapStateToProps=(state)=>{
-//   return{
-//      auth: state.firebase.auth
-//   }
-// }
+const mapStateToProps=(state)=>{
+  return{
+     auth: state.firebase.auth
+  }
+}
 // const mapDispatchToProps= (dispatch)=>{
 //   return {
-//    signOut:()=>dispatch(authActions.signout())
+//    signOut:()=>dispatch(authAction.signout())
 //   }
 // }
-export default Header;
+export default connect(mapStateToProps)(Header);

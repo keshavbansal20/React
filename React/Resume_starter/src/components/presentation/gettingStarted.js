@@ -13,7 +13,7 @@ import * as taskActions from "../../redux/actionTypes";
 import uuid from 'react-uuid';
 import { connect} from 'react-redux';
 import { withRouter} from "react-router-dom";
-import { unstable_batchedUpdates } from 'react-dom';
+// import { unstable_batchedUpdates } from 'react-dom';
 
 function GettingStarted(props) {
 
